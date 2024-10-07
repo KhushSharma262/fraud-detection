@@ -34,7 +34,7 @@ def add_recent_transaction(user_id, amount, location):
 
 # Function to add a transaction to the priority queue based on risk score
 def add_suspicious_transaction(user_id, amount, risk_score):
-    heapq.heappush(suspicious_transactions, (-risk_score, user_id, amount))
+    heapq.heappush(suspicious_transactions, (risk_score, user_id, amount))
 
 # Function to get the highest priority suspicious transaction
 def get_most_suspicious_transaction():
@@ -114,14 +114,29 @@ def detect_fraud_patterns_in_graph():
     # Implement a graph traversal algorithm to detect suspicious patterns
     pass
 
-# Example use case of processing a batch of transactions
-if __name__ == "__main__":
-    # Simulate some transactions
-    process_transaction("user_1", 15000, "New York", "user_2")
-    process_transaction("user_1", 12000, "Los Angeles", "user_3")
-    process_transaction("user_2", 5000, "Chicago", "user_4")
-    process_transaction("user_3", 20000, "Houston", "user_5")
-    process_transaction("user_4", 8000, "Miami", "user_1")
+# Infinite loop to keep asking for transaction inputs
+def main():
+    print("Starting real-time fraud detection system...")
 
-    # Get the highest-priority suspicious transaction
-    print("Most suspicious transaction: ", get_most_suspicious_transaction())
+    while True:
+        user_id = input("Enter user ID: ")
+        amount = float(input("Enter transaction amount: "))
+        location = input("Enter transaction location: ")
+        receiver_id = input("Enter receiver ID: ")
+
+        # Process the transaction
+        process_transaction(user_id, amount, location, receiver_id)
+
+        # Ask if the user wants to see the most suspicious transaction
+        view_suspicious = input("Do you want to see the most suspicious transaction? (y/n): ")
+        if view_suspicious.lower() == 'y' and suspicious_transactions:
+            most_suspicious = get_most_suspicious_transaction()
+            print(f"Most suspicious transaction: {most_suspicious}")
+        
+        # Ask if the user wants to continue or exit
+        continue_processing = input("Do you want to process another transaction? (y/n): ")
+        if continue_processing.lower() != 'y':
+            break
+
+if __name__ == "__main__":
+    main()
